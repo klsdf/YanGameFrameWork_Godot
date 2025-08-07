@@ -1,0 +1,62 @@
+[gd_scene load_steps=2 format=3 uid="uid://idpe5f1gy3j7"]
+
+[ext_resource type="Script" uid="uid://c6krg7lvi8wnj" path="res://YanGameFrameWork_Godot/yan_code_edit.gd" id="1_q152c"]
+
+[node name="CodeEdit" type="CodeEdit"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "extends CodeEdit
+
+
+# @onready var code_edit = $CodeEdit
+
+func _ready():
+	self.code_completion_enabled = true
+
+	self.code_completion_prefixes = PackedStringArray(
+		[\"p\"],
+	)
+	
+	# 连接信号到函数
+	self.text_changed.connect(_on_text_changed)
+	self.code_completion_requested.connect(_on_code_completion_requested)
+	
+	# 检查信号是否连接成功
+	print(\"信号连接状态: \", self.text_changed.get_connections())
+
+
+
+
+func _on_text_changed() -> void:
+	print(\"_on_text_changed() 函数被调用了！\")
+	self.code_completion_requested.emit()
+
+
+
+func _on_code_completion_requested() -> void:
+	if self.text==\"p\":
+		print(\"p\")
+		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, \"print\", \"print()\")
+		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, \"print_debug\", \"print_debug()\")
+		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, \"print_verbose\", \"print_verbose()\")
+		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, \"print_warning\", \"print_warning()\")
+		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, \"print_error\", \"print_error()\")
+		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, \"print_fatal\", \"print_fatal()\")
+		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, \"print_script\", \"print_script()\")
+		self.update_code_completion_options(false)
+
+"
+draw_tabs = true
+draw_spaces = true
+line_folding = true
+gutters_draw_executing_lines = true
+gutters_draw_line_numbers = true
+gutters_zero_pad_line_numbers = true
+gutters_draw_fold_gutter = true
+code_completion_enabled = true
+script = ExtResource("1_q152c")
