@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://c51buyjfd5r8e"]
+[gd_scene load_steps=4 format=3 uid="uid://c51buyjfd5r8e"]
 
 [ext_resource type="PackedScene" uid="uid://cdtdkreaw0gx6" path="res://YanGameFrameWork_Godot/code_edit.tscn" id="1_yauab"]
+[ext_resource type="Texture2D" uid="uid://dudnopsc7e7r6" path="res://YanGameFrameWork_Godot/Sprites/萤雪-微笑.png" id="2_gsa4c"]
+[ext_resource type="Script" uid="uid://dxtc7wvjkg1mn" path="res://YanGameFrameWork_Godot/test.gd" id="3_m4r34"]
 
 [node name="CodeTest" type="Control"]
 layout_mode = 3
@@ -13,8 +15,7 @@ grow_vertical = 2
 [node name="CodeEdit" parent="." node_paths=PackedStringArray("output_label", "code_run_button") instance=ExtResource("1_yauab")]
 layout_mode = 1
 offset_right = -459.0
-text = "
-
+text = "var a = 1
 func test():
 	return \"Hello from dynamic code!\""
 output_label = NodePath("../Label")
@@ -39,3 +40,27 @@ anchor_bottom = 1.0
 offset_left = -459.0
 grow_horizontal = 0
 grow_vertical = 2
+
+[node name="对话系统" type="Node" parent="."]
+
+[node name="立绘" type="TextureRect" parent="对话系统"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_top = -358.0
+offset_right = 296.0
+offset_bottom = -1.0
+grow_vertical = 0
+texture = ExtResource("2_gsa4c")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="对话框" type="Label" parent="对话系统"]
+offset_left = 233.0
+offset_top = 494.0
+offset_right = 651.0
+offset_bottom = 648.0
+
+[node name="Node" type="Node" parent="."]
+script = ExtResource("3_m4r34")
