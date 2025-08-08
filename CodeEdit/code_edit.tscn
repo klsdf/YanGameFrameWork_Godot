@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cdtdkreaw0gx6"]
 
-[ext_resource type="Script" uid="uid://c6krg7lvi8wnj" path="res://YanGameFrameWork_Godot/yan_code_edit.gd" id="1_q152c"]
+[ext_resource type="Script" uid="uid://c6krg7lvi8wnj" path="res://YanGameFrameWork_Godot/CodeEdit/yan_code_edit.gd" id="1_q152c"]
 
 [node name="CodeEdit" type="CodeEdit"]
 anchors_preset = 15

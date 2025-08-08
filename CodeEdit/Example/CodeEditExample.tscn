@@ -1,0 +1,57 @@
+[gd_scene load_steps=4 format=3 uid="uid://c51buyjfd5r8e"]
+
+[ext_resource type="PackedScene" uid="uid://cdtdkreaw0gx6" path="res://YanGameFrameWork_Godot/CodeEdit/code_edit.tscn" id="1_pjrx6"]
+[ext_resource type="PackedScene" uid="uid://daqxduwvmj8ge" path="res://YanGameFrameWork_Godot/DialogSystem/对话系统.tscn" id="2_ml66u"]
+[ext_resource type="PackedScene" uid="uid://dbpl0lrcw6pd8" path="res://YanGameFrameWork_Godot/CodeEdit/code_edit_output.tscn" id="3_ml66u"]
+
+[node name="CodeTest" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="对话系统" parent="." instance=ExtResource("2_ml66u")]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+offset_left = 620.0
+offset_top = -2.5
+offset_right = 1152.0
+offset_bottom = 650.5
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="CodeEdit" parent="VBoxContainer" node_paths=PackedStringArray("output_label", "code_run_button", "dialog_system") instance=ExtResource("1_pjrx6")]
+custom_minimum_size = Vector2(0, 502.055)
+layout_mode = 2
+size_flags_horizontal = 1
+text = "var a = 1
+func test():
+	return \"Hello from dynamic code!\"
+func _ready():
+	print(123)
+
+
+func _init():
+	print(\"yan_code_edit _init\")
+	pass
+"
+output_label = NodePath("../CodeEditOutput")
+code_run_button = NodePath("Button")
+dialog_system = NodePath("../../对话系统")
+
+[node name="Button" type="Button" parent="VBoxContainer/CodeEdit"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -163.0
+offset_bottom = 41.0
+grow_horizontal = 0
+text = "运行"
+
+[node name="CodeEditOutput" parent="VBoxContainer" instance=ExtResource("3_ml66u")]
+custom_minimum_size = Vector2(0, 152.945)
+layout_mode = 2

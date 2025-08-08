@@ -1,25 +1,21 @@
 class_name YanCodeEdit
 extends CodeEdit
 
-@export var output_label: Label
+@export var output_label: CodeEditOutput
 @export var code_run_button: Button
-@export var lsp_host: String = "127.0.0.1"
-@export var lsp_port: int = 6005
-	# 获取场景树中的节点引用
-@export var dialog_label: Label
+
 
 # 预加载DialogSystem类
 
 @export var dialog_system: DialogSystem
 
 
-@export var dic :Dictionary[String, Color]
 
 
 # 预加载本地 GDScript 语言服务器客户端
-const YanGDScriptLSPClient = preload("res://YanGameFrameWork_Godot/yan_gdscript_lsp_client.gd")
+
 # 预加载自定义语法高亮器
-const CustomSyntaxHighlighter = preload("res://YanGameFrameWork_Godot/custom_syntax_highlighter.gd")
+const CustomSyntaxHighlighter = preload("res://YanGameFrameWork_Godot/CodeEdit/custom_syntax_highlighter.gd")
 
 
 func _ready():
@@ -59,7 +55,7 @@ func setup_code_run():
 	设置代码执行按钮
 	"""
 	self.code_run_button.pressed.connect(func():
-		code_run(self, self.output_label)
+		code_run(self, self.output_label.label)
 	)
 
 	
@@ -141,10 +137,7 @@ func code_run(input: TextEdit, output: Label):
 
 	var full_code = """
 extends RefCounted
-
-# 预定义的节点引用
-var dialog_label = null
-var dialogue_system = null
+var dialog_system = null
 
 %s
 """ % user_code
@@ -165,10 +158,9 @@ var dialogue_system = null
 	
 	# 创建实例并执行
 	var instance = script.new()
-	
-	# 设置节点引用
-	if dialog_label:
-		instance.set("dialog_label", dialog_label)
+
+	if dialog_system != null:
+		instance.set("dialog_system", dialog_system)
 
 
 	# 执行用户代码
@@ -182,7 +174,7 @@ var dialogue_system = null
 
 	if "a" in instance:
 		var result2 = instance.a
-		dialog_system.speak("代码执行成功啦！\n好厉害你！") 
+		dialog_system.speak("代码执行成功啦！\n好厉害！") 
 		print("用户代码执行结果: ", result2)
 	else:
 		dialog_system.speak("代码执行失败！没有定义a是无法执行的哦~~")
