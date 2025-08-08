@@ -1,4 +1,12 @@
+class_name YanCodeEdit
+
+
 extends CodeEdit
+
+
+@export var output_label:Label
+@export var code_run_button:Button
+
 
 func _ready():
 	
@@ -9,6 +17,7 @@ func _ready():
 	
 	# 设置 Gutter 相关属性
 	setup_gutters()
+	setup_code_run()
 	
 	# 连接信号到函数
 	self.text_changed.connect(_on_text_changed)
@@ -16,6 +25,16 @@ func _ready():
 	
 	# 检查信号是否连接成功
 	print("信号连接状态: ", self.text_changed.get_connections())
+
+
+
+func setup_code_run():
+
+	self.code_run_button.pressed.connect(func():
+		code_run(self,self.output_label)
+	)
+
+	
 
 func setup_gutters():
 	"""
@@ -49,11 +68,6 @@ func setup_gutters():
 	self.gutters_draw_breakpoints_gutter = true
 
 
-
-
-
-
-
 	
 func _on_text_changed() -> void:
 	print("_on_text_changed() 函数被调用了！")
@@ -71,4 +85,58 @@ func _on_code_completion_requested() -> void:
 		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, "print_fatal", "print_fatal()")
 		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, "print_script", "print_script()")
 		self.update_code_completion_options(false)
+
+
+
+
+func code_run(input:TextEdit,output:Label):
+	# 获取用户输入的代码字符串
+	var user_code = input.text
+	
+	# 检查用户输入是否为空
+	if user_code.is_empty():
+		output.text = "请输入代码！"
+		return
+	
+	# 创建动态脚本
+	var script = GDScript.new()
+	
+	# 构建完整的脚本代码
+	# 为用户代码的每一行添加缩进
+	var indented_code = ""
+	# var lines = user_code.split("\n")
+	# for line in lines:
+	# 	if line.strip_edges() != "":  # 跳过空行
+	# 		indented_code += "\t" + line + "\n"
+	
+	var full_code = """
+extends RefCounted
+%s
+""" % user_code
+	
+	# 设置脚本源代码
+	script.set_source_code(full_code)
+	
+	# 重新加载脚本
+	script.reload()
+	
+	# 创建实例并执行
+	var instance = script.new()
+	
+	# 执行用户代码
+	var result = instance.test()
+	output.text = "代码执行成功！\n结果: " + str(result)
+	print("用户代码执行结果: ", result)
+
+
+
+
+func test():
+	return "Hello from dynamic code!"
+
+
+
+
+
+
 
