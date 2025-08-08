@@ -12,8 +12,14 @@ extends CodeEdit
 
 @export var dialog_system: DialogSystem
 
+
+@export var dic :Dictionary[String, Color]
+
+
 # 预加载本地 GDScript 语言服务器客户端
 const YanGDScriptLSPClient = preload("res://YanGameFrameWork_Godot/yan_gdscript_lsp_client.gd")
+# 预加载自定义语法高亮器
+const CustomSyntaxHighlighter = preload("res://YanGameFrameWork_Godot/custom_syntax_highlighter.gd")
 
 
 func _ready():
@@ -25,12 +31,19 @@ func _ready():
 	setup_gutters()
 	setup_code_run()
 	
+	# 设置语法高亮
+	syntax_highlighting()
+	
 	# 连接信号到函数
 	self.text_changed.connect(_on_text_changed)
 	self.code_completion_requested.connect(_on_code_completion_requested)
 	
 	# 检查信号是否连接成功
 	# print("信号连接状态: ", self.text_changed.get_connections())
+	# 动态添加关键字颜色（如果需要的话）
+	# self.syntax_highlighter.add
+
+
 
 
 
@@ -95,6 +108,18 @@ func _on_code_completion_requested() -> void:
 		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, "print_fatal", "print_fatal()")
 		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, "print_script", "print_script()")
 		self.update_code_completion_options(false)
+
+
+
+func syntax_highlighting():
+	"""
+	设置代码高亮
+	"""
+	# 创建并设置自定义语法高亮器
+	var highlighter = CustomSyntaxHighlighter.new()
+	self.syntax_highlighter = highlighter
+
+
 
 
 func code_run(input: TextEdit, output: Label):
