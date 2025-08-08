@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://daqxduwvmj8ge"]
+
+[ext_resource type="Script" uid="uid://bu3cpr613wxvo" path="res://YanGameFrameWork_Godot/DialogSystem/对话系统.gd" id="1_ara4s"]
+[ext_resource type="Texture2D" uid="uid://dudnopsc7e7r6" path="res://YanGameFrameWork_Godot/Sprites/萤雪-微笑.png" id="1_ppm3d"]
+
+[node name="对话系统" type="Node"]
+script = ExtResource("1_ara4s")
+
+[node name="立绘" type="TextureRect" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_top = -283.0
+offset_right = 234.0
+offset_bottom = -1.0
+grow_vertical = 0
+texture = ExtResource("1_ppm3d")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="对话框" type="Label" parent="."]
+offset_left = 272.0
+offset_top = 494.0
+offset_right = 690.0
+offset_bottom = 648.0
+text = "你的代码看上去运行良好"

@@ -8,6 +8,10 @@ extends CodeEdit
 	# 获取场景树中的节点引用
 @export var dialog_label: Label
 
+# 预加载DialogSystem类
+
+@export var dialog_system: DialogSystem
+
 # 预加载本地 GDScript 语言服务器客户端
 const YanGDScriptLSPClient = preload("res://YanGameFrameWork_Godot/yan_gdscript_lsp_client.gd")
 
@@ -141,22 +145,22 @@ var dialogue_system = null
 	if dialog_label:
 		instance.set("dialog_label", dialog_label)
 
-	
+
 	# 执行用户代码
 	if instance.has_method("test"):
 		var result = instance.test()
-		output.text += "代码执行成功！\n结果: " + str(result)
-		print("用户代码执行结果: ", result)
+		output.text += str(result)
+		dialog_system.speak(str(result))
 	else:
-		output.text += "代码执行失败！给我老老实实写函数啊"
+		dialog_system.speak("代码执行失败！看看是不是把函数名写错了哦~一定要写test") 
 		print("用户代码执行失败！")
 
 	if "a" in instance:
 		var result2 = instance.a
-		output.text += "代码执行成功！\n结果: " + str(result2)
+		dialog_system.speak("代码执行成功啦！\n好厉害你！") 
 		print("用户代码执行结果: ", result2)
 	else:
-		output.text += "代码执行失败！给我老老实实写变量啊"
+		dialog_system.speak("代码执行失败！没有定义a是无法执行的哦~~")
 		print("用户代码执行失败！")
 
 
