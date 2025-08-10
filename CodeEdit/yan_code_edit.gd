@@ -90,12 +90,34 @@ func setup_gutters():
 
 
 func _on_text_changed() -> void:
-	print("_on_text_changed() 函数被调用了！")
 	self.code_completion_requested.emit()
 
 
 func _on_code_completion_requested() -> void:
-	if self.text == "p":
+	"""
+	当代码补全被请求时触发
+	根据当前光标位置的文本内容提供相应的补全选项
+	"""
+	# 获取鼠标所在的列和行
+	var current_column = self.get_caret_column()
+	var current_line = self.get_caret_line()
+	
+	# 获取当前行的文本
+	var line_text = self.get_line(current_line)
+
+	# print("line_text: ", line_text)
+	
+	# 从光标位置向前查找，找到当前正在输入的单词
+	var word_start = current_column
+	while word_start > 0 and _is_valid_identifier_char(line_text[word_start - 1]):
+		word_start -= 1
+	
+	# 获取当前正在输入的单词
+	var current_word = line_text.substr(word_start, current_column - word_start)
+	# print("current_word: ", current_word)
+
+	# 如果当前单词以 'p' 开头，提供 print 相关的补全选项
+	if current_word.begins_with("p"):
 		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, "print", "print()")
 		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, "print_debug", "print_debug()")
 		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, "print_verbose", "print_verbose()")
@@ -103,8 +125,36 @@ func _on_code_completion_requested() -> void:
 		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, "print_error", "print_error()")
 		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, "print_fatal", "print_fatal()")
 		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, "print_script", "print_script()")
-		self.update_code_completion_options(false)
 
+
+	if current_word.begins_with("f"):
+		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, "func", "func()")
+	if current_word.begins_with("v"):
+		self.add_code_completion_option(CodeEdit.KIND_VARIABLE, "var", "var()")
+	if current_word.begins_with("c"):
+		self.add_code_completion_option(CodeEdit.KIND_CONSTANT, "const", "const()")
+	if current_word.begins_with("i"):
+		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, "if", "if()")
+	self.update_code_completion_options(false)
+
+
+func _is_valid_identifier_char(char: String) -> bool:
+	"""
+	检查字符是否为有效的标识符字符
+	在 GDScript 中，标识符可以包含字母、数字和下划线，但不能以数字开头
+	"""
+	# 检查是否为字母（包括下划线）
+	if char == "_":
+		return true
+	# 检查是否为字母 (a-z, A-Z)
+	if char.length() == 1:
+		var code = char.unicode_at(0)
+		if (code >= 65 and code <= 90) or (code >= 97 and code <= 122):  # A-Z 或 a-z
+			return true
+		# 检查是否为数字 (0-9)
+		if code >= 48 and code <= 57:  # 0-9
+			return true
+	return false
 
 
 func syntax_highlighting():
