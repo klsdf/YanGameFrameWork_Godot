@@ -173,8 +173,11 @@ func code_run(input: TextEdit, output: Label):
 	var script = GDScript.new()
 	
 
+
+	
+
 	var full_code = """
-extends RefCounted
+extends Node
 var dialog_system = null
 
 %s
@@ -196,7 +199,7 @@ var dialog_system = null
 	
 	# 创建实例并执行
 	var instance = script.new()
-
+	add_child(instance)  # 添加到当前节点下
 	if dialog_system != null:
 		instance.set("dialog_system", dialog_system)
 
@@ -217,6 +220,8 @@ var dialog_system = null
 	else:
 		dialog_system.speak("代码执行失败！没有定义a是无法执行的哦~~")
 		print("用户代码执行失败！")
+	# 执行完后记得移除
+	instance.queue_free()
 
 
 # 使用示例：

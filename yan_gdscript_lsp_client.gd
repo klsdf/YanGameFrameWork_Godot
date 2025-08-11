@@ -68,7 +68,7 @@ func analyze_code(code:String, host:String, port:int) -> Array:
 	_lsp_send(tcp, did_open)
 
 	# 等待 publishDiagnostics
-	var deadline = Time.get_ticks_msec() + 800
+	deadline = Time.get_ticks_msec() + 800
 	var diag_count := 0
 	while Time.get_ticks_msec() < deadline:
 		var msg = _lsp_recv(tcp, 200)

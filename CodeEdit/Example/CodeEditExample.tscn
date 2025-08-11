@@ -62,3 +62,8 @@ layout_mode = 2
 
 [node name="Node" type="Node" parent="."]
 script = ExtResource("4_lwlwv")
+
+[node name="TestLabel" type="Label" parent="."]
+layout_mode = 0
+offset_right = 469.0
+offset_bottom = 189.0
