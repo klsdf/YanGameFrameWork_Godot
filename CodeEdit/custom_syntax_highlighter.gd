@@ -1,6 +1,10 @@
 class_name CustomSyntaxHighlighter
 extends CodeHighlighter
 
+"""
+自定义语法高亮器
+用于高亮显示代码中的关键字、变量、函数等
+"""
 
 # 初始化方法
 func _init():

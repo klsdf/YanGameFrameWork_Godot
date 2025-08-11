@@ -17,6 +17,10 @@ extends CodeEdit
 # 预加载自定义语法高亮器
 const CustomSyntaxHighlighter = preload("res://YanGameFrameWork_Godot/CodeEdit/custom_syntax_highlighter.gd")
 
+# 预加载代码补全配置
+const CodeCompletionConfig = preload("res://YanGameFrameWork_Godot/CodeEdit/code_completion_config.gd")
+
+
 
 func _ready():
 	self.code_completion_prefixes = PackedStringArray(
@@ -117,24 +121,8 @@ func _on_code_completion_requested() -> void:
 	# print("current_word: ", current_word)
 
 	# 如果当前单词以 'p' 开头，提供 print 相关的补全选项
-	if current_word.begins_with("p"):
-		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, "print", "print()")
-		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, "print_debug", "print_debug()")
-		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, "print_verbose", "print_verbose()")
-		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, "print_warning", "print_warning()")
-		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, "print_error", "print_error()")
-		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, "print_fatal", "print_fatal()")
-		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, "print_script", "print_script()")
+	CodeCompletionConfig.get_completion_options(current_word, self)
 
-
-	if current_word.begins_with("f"):
-		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, "func", "func()")
-	if current_word.begins_with("v"):
-		self.add_code_completion_option(CodeEdit.KIND_VARIABLE, "var", "var()")
-	if current_word.begins_with("c"):
-		self.add_code_completion_option(CodeEdit.KIND_CONSTANT, "const", "const()")
-	if current_word.begins_with("i"):
-		self.add_code_completion_option(CodeEdit.KIND_FUNCTION, "if", "if()")
 	self.update_code_completion_options(false)
 
 
@@ -245,3 +233,26 @@ var dialog_system = null
 #         return "对话框内容已修改为: test"
 #     else:
 #         return "未找到对话框节点"
+
+
+
+
+# 在编辑器中显示一个按钮，点击即可调用函数
+@export var test_button: bool = false:
+	set(value):
+		if value:
+			test_function()
+			test_button = false  # 重置按钮状态
+
+
+
+
+# 测试函数
+func test_function():
+	# 通过全局挂载点访问工具类
+	var found_node = YanGF.yan_util.find_node_by_name(self, "对话系统")
+	if found_node:
+		found_node.speak("测试函数被调用了！")
+		print("成功找到对话系统节点：", found_node.name)
+	else:
+		print("未找到对话系统节点！")
