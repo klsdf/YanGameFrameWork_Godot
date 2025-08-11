@@ -160,9 +160,9 @@ func code_run(input: TextEdit, output: Label):
 	"""
 	执行用户输入的代码
 	"""
+
 	# 获取用户输入的代码字符串
 	var user_code = input.text
-	
 	output.text = ""
 	# 检查用户输入是否为空
 	if user_code.is_empty():
@@ -171,6 +171,7 @@ func code_run(input: TextEdit, output: Label):
 	
 	# 创建动态脚本
 	var script = GDScript.new()
+
 	
 
 
@@ -261,3 +262,11 @@ func test_function():
 		print("成功找到对话系统节点：", found_node.name)
 	else:
 		print("未找到对话系统节点！")
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_CRASH:
+		# 处理崩溃
+		print("检测到崩溃！")
+	elif what == NOTIFICATION_OS_MEMORY_WARNING:
+		# 处理内存警告
+		print("内存不足警告！")
