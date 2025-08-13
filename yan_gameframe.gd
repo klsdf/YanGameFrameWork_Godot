@@ -8,9 +8,13 @@ extends Node
 
 # 预加载所有工具类
 var yan_util: YanUtil
+var yan_debug: YanDebug
+var log_controller: LogController
 
 func _ready():
 	# 创建工具类实例
 	yan_util = YanUtil.new()
-	print("YanGameFrameWork 已启动！")
-	print("可以通过 YanGameFrameWork.yan_util 访问工具类")
+	yan_debug = YanDebug.new()
+	log_controller = LogController.new()
+	yan_debug.print("YanGameFrameWork", "已启动！")
+

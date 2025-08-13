@@ -47,9 +47,8 @@ func _ready():
 
 
 
-
 func _init():
-	print("yan_code_edit _init")
+
 	pass
 
 
@@ -59,7 +58,7 @@ func setup_code_run():
 	设置代码执行按钮
 	"""
 	self.code_run_button.pressed.connect(func():
-		code_run(self, self.output_label.label)
+		code_run(self, self.output_label)
 	)
 
 	
@@ -156,17 +155,17 @@ func syntax_highlighting():
 
 
 
-func code_run(input: TextEdit, output: Label):
+func code_run(input: TextEdit, output: CodeEditOutput):
 	"""
 	执行用户输入的代码
 	"""
 
+	YanGF.yan_debug.print(get_class(), "开始执行代码")
 	# 获取用户输入的代码字符串
 	var user_code = input.text
-	output.text = ""
 	# 检查用户输入是否为空
 	if user_code.is_empty():
-		output.text = "请输入代码！"
+		output.set_output_text("请输入代码！")
 		return
 	
 	# 创建动态脚本
@@ -186,18 +185,25 @@ var dialog_system = null
 	
 	# 设置脚本源代码
 	script.set_source_code(full_code)
-	
+	var log_content = ""
 	# 重新加载脚本（检查是否有编译错误）
 	var reload_err: Error = script.reload()
 	if reload_err != OK:
 		var err_text := error_string(reload_err)
 		var parts := []
 		parts.append("编译失败：%s (错误码=%s)" % [err_text, str(reload_err)])
-		output.text = "\n".join(parts)
+		print("\n".join(parts))
+
+		log_content = YanGF.log_controller.read_log_files()
+		output.set_output_text(log_content)
 		return
 	else:
 		print("代码编译成功")
 	
+
+
+	
+
 	# 创建实例并执行
 	var instance = script.new()
 	add_child(instance)  # 添加到当前节点下
@@ -208,7 +214,7 @@ var dialog_system = null
 	# 执行用户代码
 	if instance.has_method("test"):
 		var result = instance.test()
-		output.text += str(result)
+		print(str(result))
 		dialog_system.speak(str(result))
 	else:
 		dialog_system.speak("代码执行失败！看看是不是把函数名写错了哦~一定要写test") 
@@ -223,6 +229,10 @@ var dialog_system = null
 		print("用户代码执行失败！")
 	# 执行完后记得移除
 	instance.queue_free()
+
+	YanGF.yan_debug.print(get_class(), "代码执行完成")
+	log_content = YanGF.log_controller.read_log_files()
+	output.set_output_text(log_content)
 
 
 # 使用示例：
