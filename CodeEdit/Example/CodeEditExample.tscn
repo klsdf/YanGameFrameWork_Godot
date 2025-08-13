@@ -1,5 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://c51buyjfd5r8e"]
+[gd_scene load_steps=6 format=3 uid="uid://c51buyjfd5r8e"]
 
+[ext_resource type="Script" uid="uid://dqqk6wkhgerkm" path="res://example.gd" id="1_acb4h"]
 [ext_resource type="PackedScene" uid="uid://cdtdkreaw0gx6" path="res://YanGameFrameWork_Godot/CodeEdit/code_edit.tscn" id="1_pjrx6"]
 [ext_resource type="PackedScene" uid="uid://daqxduwvmj8ge" path="res://YanGameFrameWork_Godot/DialogSystem/对话系统.tscn" id="2_ml66u"]
 [ext_resource type="PackedScene" uid="uid://dbpl0lrcw6pd8" path="res://YanGameFrameWork_Godot/CodeEdit/code_edit_output.tscn" id="3_ml66u"]
@@ -12,6 +13,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_acb4h")
 
 [node name="对话系统" parent="." instance=ExtResource("2_ml66u")]
 

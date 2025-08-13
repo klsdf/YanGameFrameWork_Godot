@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://c8yay001m2n3p"]
+[gd_scene load_steps=2 format=3 uid="uid://c8yay001m2n3p"]
 
-[ext_resource type="Script" uid="uid://c6krg7lvi8wnj" path="res://YanGameFrameWork_Godot/CodeEdit/yan_code_edit.gd" id="1_script"]
-[ext_resource type="Script" path="res://YanGameFrameWork_Godot/CodeEdit/ErrorHandlingExample.gd" id="2_script"]
+[ext_resource type="Script" uid="uid://b36lp2ck34xry" path="res://YanGameFrameWork_Godot/CodeEdit/ErrorHandlingExample.gd" id="2_script"]
 
 [node name="ErrorHandlingExample" type="Control"]
 layout_mode = 3
@@ -32,55 +31,35 @@ layout_mode = 2
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="CodeEdit" parent="CodeEditContainer" instance=ExtResource("1_script")]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="OutputContainer" type="VBoxContainer" parent="CodeEditContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="OutputLabel" type="Label" parent="CodeEditContainer/OutputContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-text = "输出结果将在这里显示"
-vertical_alignment = 1
-
-[node name="ButtonContainer" type="VBoxContainer" parent="CodeEditContainer/OutputContainer"]
-layout_mode = 2
-
-[node name="RunButton" type="Button" parent="CodeEditContainer/OutputContainer/ButtonContainer"]
-layout_mode = 2
-text = "运行代码"
-
-[node name="ShowErrorLogButton" type="Button" parent="CodeEditContainer/OutputContainer/ButtonContainer"]
-layout_mode = 2
-text = "显示错误日志"
-
-[node name="ClearLogButton" type="Button" parent="CodeEditContainer/OutputContainer/ButtonContainer"]
-layout_mode = 2
-text = "清空错误日志"
-
 [node name="Instructions" type="RichTextLabel" parent="VBoxContainer"]
 layout_mode = 2
 text = "[b]使用说明：[/b]
 
 1. 在代码编辑器中输入GDScript代码
-2. 点击"运行代码"按钮执行代码
-3. 如果代码有错误，错误处理系统会自动捕捉并显示
-4. 点击"显示错误日志"查看所有错误记录
-5. 点击"清空错误日志"清除错误记录
+2. 点击"
 
-[b]测试代码示例：[/b]
+[node name="CodeEditContainer#OutputContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[code]func test():
-    return "Hello World!"[/code]
+[node name="CodeEditContainer_OutputContainer#OutputLabel" type="Label" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+text = "输出结果将在这里显示"
+vertical_alignment = 1
 
-[b]错误代码示例：[/b]
+[node name="CodeEditContainer_OutputContainer#ButtonContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
 
-[code]func test():
-    kjh  # 这行会导致语法错误
-    return "Hello World!"[/code]"
-fit_content = true
+[node name="CodeEditContainer_OutputContainer_ButtonContainer#RunButton" type="Button" parent="."]
+layout_mode = 2
+text = "运行代码"
+
+[node name="CodeEditContainer_OutputContainer_ButtonContainer#ShowErrorLogButton" type="Button" parent="."]
+layout_mode = 2
+text = "显示错误日志"
+
+[node name="CodeEditContainer_OutputContainer_ButtonContainer#ClearLogButton" type="Button" parent="."]
+layout_mode = 2
+text = "清空错误日志"
