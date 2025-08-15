@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cdtdkreaw0gx6"]
+[gd_scene load_steps=3 format=3 uid="uid://cdtdkreaw0gx6"]
 
-[ext_resource type="Script" uid="uid://c6krg7lvi8wnj" path="res://YanGameFrameWork_Godot/CodeEdit/yan_code_edit.gd" id="1_q152c"]
+[ext_resource type="Script" uid="uid://pht7tms3wutk" path="res://YanGameFrameWork_Godot/yan_code_edit.gd" id="1_4jsk8"]
+[ext_resource type="Script" uid="uid://e21oqp6iwdwm" path="res://YanGameFrameWork_Godot/ScriptRunner/ScriptRunner.gd" id="2_iuxfb"]
 
 [node name="CodeEdit" type="CodeEdit"]
 anchors_preset = 15
@@ -61,4 +62,7 @@ gutters_draw_line_numbers = true
 gutters_zero_pad_line_numbers = true
 gutters_draw_fold_gutter = true
 code_completion_enabled = true
-script = ExtResource("1_q152c")
+script = ExtResource("1_4jsk8")
+
+[node name="ScriptRunner" type="Node" parent="."]
+script = ExtResource("2_iuxfb")

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dbpl0lrcw6pd8"]
 
-[ext_resource type="Script" uid="uid://b31msw78jcuoj" path="res://YanGameFrameWork_Godot/CodeEdit/code_edit_output.gd" id="1_n2u4i"]
+[ext_resource type="Script" uid="uid://c6kge77yd1ppa" path="res://YanGameFrameWork_Godot/CodeEdit/CodeEditOutput.gd" id="1_g0owb"]
 
 [node name="CodeEditOutput" type="ColorRect"]
 anchors_preset = 11
@@ -12,7 +12,7 @@ offset_top = 488.0
 grow_horizontal = 0
 grow_vertical = 2
 color = Color(0.140447, 0.140447, 0.140447, 1)
-script = ExtResource("1_n2u4i")
+script = ExtResource("1_g0owb")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 layout_mode = 1
@@ -37,3 +37,11 @@ text = "123123
 1231
 23123231232312323123231232312323123231232312323123231232312323123231232312323123231232312323123"
 scroll_following = true
+
+[node name="ButtonClear" type="Button" parent="."]
+layout_mode = 0
+offset_left = 260.0
+offset_top = -40.0
+offset_right = 388.0
+offset_bottom = 3.0
+text = "清空控制台"

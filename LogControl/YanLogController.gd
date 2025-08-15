@@ -1,37 +1,44 @@
-class_name LogController
+class_name YanLogController
 extends RefCounted
 
 ## 简化的日志控制器
 ## 只有一个按钮和一个输出标签，点击按钮读取日志内容
 
 ## 日志文件路径配置
-var log_directory_path: String = "C:/Users/17966/AppData/Roaming/Godot/app_userdata/godot cpp template/logs"
+var _log_file_path: String
+var log_file_path: String:
+	get:
+		if _log_file_path.is_empty():
+			# 动态构建日志文件路径
+			var user_data_dir = OS.get_user_data_dir()  # 获取用户数据目录
+			_log_file_path = user_data_dir.path_join("logs").path_join("godot.log")
+		return _log_file_path
 
+# "C:/Users/17966/AppData/Roaming/Godot/app_userdata/godot cpp template/logs/godot.log"
+func clear_log_files()->void:
+	"""清空日志文件"""
+	# 直接清空指定的日志文件
+	var file = FileAccess.open(log_file_path, FileAccess.WRITE)
+	if not file:
+		print("错误：无法访问日志文件: " + log_file_path)
+		return
+	file.close()
+	print("日志文件已清空")
 
 func read_log_files()->String:
 	"""读取日志文件内容"""
 	print("正在读取日志文件...")
 	
-	# 检查日志目录是否存在
-	var dir = DirAccess.open(log_directory_path)
-	if not dir:
-		print("错误：无法访问日志目录: " + log_directory_path)
+	# 直接读取指定的日志文件
+	var file = FileAccess.open(log_file_path, FileAccess.READ)
+	if not file:
+		print("错误：无法访问日志文件: " + log_file_path)
 		return ""
 	
-	# 获取所有日志文件
-	var file_list = dir.get_files()
-	
-	for file_name in file_list:
-		# 只处理godot.log文件
-		if file_name == "godot.log":
-			var full_path = log_directory_path.path_join(file_name)
-			var file = FileAccess.open(full_path, FileAccess.READ)
-			if file:
-				# 读取文件内容并应用筛选规则
-				var filtered_content = _apply_log_filter_rules(file)
-				file.close()
-				return filtered_content
-	return ""
+	# 读取文件内容并应用筛选规则
+	var filtered_content = _apply_log_filter_rules(file)
+	file.close()
+	return filtered_content
 
 ## 应用日志筛选规则
 func _apply_log_filter_rules(file: FileAccess) -> String:

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bqxqxqxqxqxq"]
 
-[ext_resource type="Script" uid="uid://bvas6x6y860rc" path="res://YanGameFrameWork_Godot/LogControl/LogController.gd" id="1_0"]
+[ext_resource type="Script" uid="uid://b5fdrxwcdqsc8" path="res://YanGameFrameWork_Godot/LogControl/YanLogController.gd" id="1_mpmwm"]
 
 [node name="LogController" type="Control"]
 layout_mode = 3
@@ -10,7 +10,7 @@ anchor_bottom = 1.0
 offset_right = -851.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_0")
+script = ExtResource("1_mpmwm")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
