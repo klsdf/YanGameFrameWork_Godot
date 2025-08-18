@@ -5,8 +5,24 @@ extends RefCounted
 工具类，提供各种静态方法
 """
 
+
+func find_local_node_by_name(root: Node, target_name: String) -> Node:
+	"""递归遍历某一个节点的所有子节点，查找指定名称的节点，返回找到的节点，如果没找到返回null"""
+	if root.name == target_name:
+		return root
+	
+	# 遍历所有子节点
+	for child in root.get_children():
+		var result = find_local_node_by_name(child, target_name)
+		if result:
+			return result
+	
+	return null
+
+
+
 # 通过节点名称查找节点
-static func find_node_by_name(node: Node, node_name: String) -> Node:
+static func find_global_node_by_name(node: Node, node_name: String) -> Node:
 	"""
 	通过节点名称查找节点
 	参数：

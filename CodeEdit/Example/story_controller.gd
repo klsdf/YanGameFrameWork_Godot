@@ -1,6 +1,5 @@
-extends Node
 class_name StoryController
-
+extends RefCounted
 
 class Story:
 	
@@ -43,10 +42,3 @@ var story: Array[Story] = [
 		Story.new("第一题，定义变量a，并且赋值为1", "错误内容", "正确内容", 1),
 		Story.new( "这是一个故事2", "错误内容2", "正确内容2", null)
 	]
-
-
-
-func _ready():
-	
-	
-	pass

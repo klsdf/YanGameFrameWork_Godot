@@ -1,10 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://c51buyjfd5r8e"]
+[gd_scene load_steps=4 format=3 uid="uid://c51buyjfd5r8e"]
 
-[ext_resource type="Script" uid="uid://c2g8ry7lu7oeu" path="res://YanGameFrameWork_Godot/test_real_error_interception.gd" id="1_acb4h"]
 [ext_resource type="PackedScene" uid="uid://cdtdkreaw0gx6" path="res://YanGameFrameWork_Godot/CodeEdit/Scenes/code_edit.tscn" id="1_pjrx6"]
 [ext_resource type="Script" uid="uid://do6uftc507k35" path="res://YanGameFrameWork_Godot/CodeEdit/YanCodeEdit.gd" id="3_acb4h"]
 [ext_resource type="PackedScene" uid="uid://dbpl0lrcw6pd8" path="res://YanGameFrameWork_Godot/CodeEdit/Scenes/code_edit_output.tscn" id="3_ml66u"]
-[ext_resource type="Script" uid="uid://b6x1bom0emwbs" path="res://YanGameFrameWork_Godot/CodeEdit/Example/story_controller.gd" id="4_lwlwv"]
 
 [node name="CodeTest" type="Control"]
 layout_mode = 3
@@ -14,7 +12,6 @@ anchor_bottom = 1.0
 offset_left = 528.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_acb4h")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -46,6 +43,7 @@ func _init():
 script = ExtResource("3_acb4h")
 output_label = NodePath("../CodeEditOutput")
 code_run_button = NodePath("Button")
+test_button = false
 
 [node name="Button" type="Button" parent="VBoxContainer/CodeEdit"]
 layout_mode = 1
@@ -60,9 +58,6 @@ text = "运行"
 [node name="CodeEditOutput" parent="VBoxContainer" instance=ExtResource("3_ml66u")]
 custom_minimum_size = Vector2(0, 152.945)
 layout_mode = 2
-
-[node name="Node" type="Node" parent="."]
-script = ExtResource("4_lwlwv")
 
 [node name="TestLabel" type="Label" parent="."]
 layout_mode = 0
