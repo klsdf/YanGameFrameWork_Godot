@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://cjqpg8a1o522k"]
+
+[ext_resource type="Script" uid="uid://d0a4yyi3yuomp" path="res://YanGameFrameWork_Godot/UI/yan_button.gd" id="1_rk6ts"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rk6ts"]
+bg_color = Color(1, 0, 0, 1)
+
+[node name="Button" type="Button"]
+offset_right = 171.0
+offset_bottom = 71.0
+theme_override_font_sizes/font_size = 41
+text = "返回"
+script = ExtResource("1_rk6ts")
+
+[node name="RedDot" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -39.0
+offset_bottom = 38.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_rk6ts")
