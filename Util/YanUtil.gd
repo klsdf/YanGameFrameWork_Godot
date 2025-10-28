@@ -22,7 +22,7 @@ func find_local_node_by_name(root: Node, target_name: String) -> Node:
 
 
 # 通过节点名称查找节点
-static func find_global_node_by_name(node: Node, node_name: String) -> Node:
+func find_global_node_by_name(node: Node, node_name: String) -> Node:
 	"""
 	通过节点名称查找节点
 	参数：
@@ -63,7 +63,7 @@ static func find_global_node_by_name(node: Node, node_name: String) -> Node:
 		return null
 
 # 辅助函数：打印节点树结构
-static func _print_node_tree(node: Node, depth: int):
+func _print_node_tree(node: Node, depth: int):
 	var indent = "  ".repeat(depth)
 	print(indent + "- " + node.name + " (" + node.get_class() + ")")
 	for child in node.get_children():
