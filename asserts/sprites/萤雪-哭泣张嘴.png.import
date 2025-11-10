@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bm3j7y4fgms4r"
-path="res://.godot/imported/萤雪-伤心.png-f8ce7d612757a769435a50d7002d02f1.ctex"
+uid="uid://cts504bxh487n"
+path="res://.godot/imported/萤雪-哭泣张嘴.png-a7aa0e7c37f4e701a6d0b76ddae49530.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://YanGameFrameWork_Godot/Sprites/萤雪-伤心.png"
-dest_files=["res://.godot/imported/萤雪-伤心.png-f8ce7d612757a769435a50d7002d02f1.ctex"]
+source_file="res://YanGameFrameWork_Godot/asserts/sprites/萤雪-哭泣张嘴.png"
+dest_files=["res://.godot/imported/萤雪-哭泣张嘴.png-a7aa0e7c37f4e701a6d0b76ddae49530.ctex"]
 
 [params]
 

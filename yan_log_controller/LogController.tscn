@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bqxqxqxqxqxq"]
 
-[ext_resource type="Script" uid="uid://b5fdrxwcdqsc8" path="res://YanGameFrameWork_Godot/LogControl/YanLogController.gd" id="1_mpmwm"]
+[ext_resource type="Script" uid="uid://b5fdrxwcdqsc8" path="res://YanGameFrameWork_Godot/yan_log_controller/YanLogController.gd" id="1_mpmwm"]
 
 [node name="LogController" type="Control"]
 layout_mode = 3

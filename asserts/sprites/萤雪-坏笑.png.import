@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://sn332stqntex"
-path="res://.godot/imported/萤雪-闭目微笑.png-38570073d9a38b1b760137d977a7c829.ctex"
+uid="uid://2lvma2laf5vl"
+path="res://.godot/imported/萤雪-坏笑.png-2591a2b56662562c191bfbf8ec2e7b02.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://YanGameFrameWork_Godot/Sprites/萤雪-闭目微笑.png"
-dest_files=["res://.godot/imported/萤雪-闭目微笑.png-38570073d9a38b1b760137d977a7c829.ctex"]
+source_file="res://YanGameFrameWork_Godot/asserts/sprites/萤雪-坏笑.png"
+dest_files=["res://.godot/imported/萤雪-坏笑.png-2591a2b56662562c191bfbf8ec2e7b02.ctex"]
 
 [params]
 
