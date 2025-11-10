@@ -18,11 +18,11 @@ class_name YanProgrammingStyle
 ## 自定义信号需要注释，信号名使用snake_case风格
 signal button_start_game_pressed()
 
-## 所有常量均使用
+## 所有常量均使用UPPER_SNAKE_CASE
 const I_AM_CONST = 100
 
 ## 显示类型枚举
-## 枚举类型使用PascalCase风格，枚举值使用UPPER_SNAKE_CASE风格
+## 枚举类型使用PascalCase风格，枚举值使用UPPER_SNAKE_CASE
 ## 枚举值的注释要写在枚举值的后面，防止迷惑行为
 enum GameState {
 	STATE_IDLE,# 空闲状态
