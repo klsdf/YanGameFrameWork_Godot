@@ -70,22 +70,3 @@ func public_func():
 func calculate_sum(a: int, b: int) -> int:
 	return a + b
 
-
-## ============================================================================
-## 代码风格检查工具使用说明
-## ============================================================================
-
-## 项目提供了类似 ESLint 的代码风格检查工具（GDScriptLinter）
-## 使用方法：
-## 1. 编辑器插件方式（推荐）：
-##    - 在项目设置中启用 "GDScript Linter" 插件
-##    - 保存文件时会自动检查代码风格
-##    - 检查结果会显示在编辑器的输出面板中
-##
-## 2. 手动调用方式：
-##    var linter = GDScriptLinter.new()
-##    var results = linter.lint(source_code, file_path)
-##    for result in results:
-##        print("[%s] 第%d行: %s" % [result.severity, result.line, result.message])
-##
-## 详细说明请参考：README_LINTER.md

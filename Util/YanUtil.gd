@@ -9,12 +9,20 @@ extends RefCounted
 ## @param root: Node 希望查找的节点
 ## @param target_name: String 希望查找的节点名称
 ## @return Node 找到的节点，如果没找到返回null
-func find_local_node_by_name(root: Node, target_name: String) -> Node:
-	# 如果 root 本身就是要找的节点，直接返回
-	if root.name == target_name:
-		return root
-	# 使用 find_child 递归查找子节点（不包含自身）
-	return root.find_child(target_name, true, false)
+func find_local_node_by_name(node: Node, target_name: String) -> Node:
+	return node.find_child(target_name, true, true)
+
+
+# func find_local_node_by_name(root: Node, target_name: String) -> Node:
+# 	if root.name == target_name:
+# 		return root
+	
+# 	# 遍历所有子节点
+# 	for child in root.get_children():
+# 		var result = find_local_node_by_name(child, target_name)
+# 		if result:
+# 			return result
+# 	return null
 
 
 ## 通过节点名称查找节点（在整个场景中查找）

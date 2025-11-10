@@ -247,14 +247,16 @@ func _load_csv_raw(file_path: String, header_lines_num: int = 0 ) -> CSVData:
 	# 如果需要包含表头，读取表头
 	if header_lines_num > 0:
 		for i in range(header_lines_num):
-			var _header_line = file.get_line()
+			var _header_line = _read_csv_line(file)
 			if not _header_line.is_empty():
 				var values = _split_csv_line(_header_line)
 				result.header.append(values)
 	
-	# 逐行读取
+	# 逐行读取（支持多行字段）
 	while not file.eof_reached():
-		var line = file.get_line()
+		var line = _read_csv_line(file)
+		if line.is_empty() and file.eof_reached():
+			break
 		if line.is_empty():
 			continue
 		
@@ -266,26 +268,95 @@ func _load_csv_raw(file_path: String, header_lines_num: int = 0 ) -> CSVData:
 	return result
 
 
-## 内部方法：安全分割CSV行（处理引号内的逗号）
+## 内部方法：读取CSV行（支持多行字段，即引号内的换行符）
+## 根据CSV标准，如果字段值包含换行符，字段必须用双引号括起来
+## 此方法会读取完整的一行，包括引号内的换行符
+func _read_csv_line(file: FileAccess) -> String:
+	if file.eof_reached():
+		return ""
+	
+	var result = ""
+	var in_quotes = false
+	var line = file.get_line()
+	
+	# 如果文件已结束且行为空，直接返回
+	if line.is_empty() and file.eof_reached():
+		return ""
+	
+	result = line
+	
+	# 检查是否在引号内（需要正确统计引号，忽略转义的引号）
+	var i = 0
+	while i < line.length():
+		if line[i] == '"':
+			# 检查是否是转义的引号（两个连续引号 ""）
+			if i + 1 < line.length() and line[i + 1] == '"':
+				# 这是转义的引号，跳过
+				i += 2
+				continue
+			else:
+				# 这是真正的引号，切换状态
+				in_quotes = !in_quotes
+		i += 1
+	
+	# 如果引号未闭合，说明字段值跨越多行，需要继续读取
+	while in_quotes and not file.eof_reached():
+		var next_line = file.get_line()
+		result += "\n" + next_line
+		
+		# 重新检查引号状态
+		i = 0
+		while i < next_line.length():
+			if next_line[i] == '"':
+				# 检查是否是转义的引号
+				if i + 1 < next_line.length() and next_line[i + 1] == '"':
+					i += 2
+					continue
+				else:
+					in_quotes = !in_quotes
+			i += 1
+	
+	return result
+
+## 内部方法：安全分割CSV行（处理引号内的逗号和换行符）
 func _split_csv_line(line: String) -> Array:
 	var result: Array = []
 	var current = ""
 	var separator: String = ","
 	var in_quotes = false
+	var field_started_with_quote = false
 	
-	for i in range(line.length()):
+	var i = 0
+	while i < line.length():
 		var char_code = line[i]
 		
 		if char_code == '"':
-			in_quotes = !in_quotes
+			if not in_quotes:
+				# 字段开始，遇到开始的引号
+				in_quotes = true
+				field_started_with_quote = true
+			else:
+				# 在引号内，检查是否是转义的引号（两个连续引号 ""）
+				if i + 1 < line.length() and line[i + 1] == '"':
+					# 转义的引号，添加一个引号到字段值中
+					current += '"'
+					i += 2  # 跳过两个引号
+					continue
+				else:
+					# 结束引号
+					in_quotes = false
 		elif char_code == separator and not in_quotes:
-			result.append(current.strip_edges())
+			# 字段分隔符，且不在引号内
+			result.append(current)
 			current = ""
+			field_started_with_quote = false
 		else:
+			# 普通字符，添加到当前字段
 			current += char_code
+		
+		i += 1
 	
-	# 添加最后一段
-	if not current.is_empty() or not in_quotes:
-		result.append(current.strip_edges())
+	# 添加最后一个字段
+	result.append(current)
 	
 	return result
