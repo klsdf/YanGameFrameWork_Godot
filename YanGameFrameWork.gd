@@ -41,3 +41,11 @@ static var Log: YanLogController:
 		if not _log:
 			_log = YanLogController.new()
 		return _log
+
+# CSV管理器
+static var _csv: YanCSVManager
+static var CSV: YanCSVManager:
+	get:
+		if not _csv:
+			_csv = YanCSVManager.new()
+		return _csv
