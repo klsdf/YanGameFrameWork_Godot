@@ -20,6 +20,8 @@ class CSVData:
 ## 读取CSV文件并返回二维数组
 ## @param file_path: CSV文件路径
 ## @param header_lines: 需要跳过的表头行数，默认0
+## 注意！！！如果有表头，可以直接使用load_csv(xxx,1)，无需手动跳过
+
 ## @return: 返回Array[Array]，内层数组是每行的数据
 ## 示例: [["张三", "18"], ["李四", "20"]]
 func load_csv(file_path: String, header_lines: int = 0) -> Array[Array]:
