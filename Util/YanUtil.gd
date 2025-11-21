@@ -29,7 +29,7 @@ func load_scene(scene_name: String) -> Node:
 			_packed_scene_cache[cache_key] = cached_res
 			return (cached_res as PackedScene).instantiate()
 	
-	var start_paths := ["res://scenes", "res://"]
+	var start_paths := ["res://scenes"]
 	for start_path in start_paths:
 		if not DirAccess.dir_exists_absolute(start_path):
 			continue
@@ -45,7 +45,7 @@ func load_scene(scene_name: String) -> Node:
 				print("找到资源但不是场景：", found_path)
 				return null
 	
-	print("未找到场景：", scene_name)
+	print("YanUtil: 未找到场景：", scene_name)
 	return null
 
 
