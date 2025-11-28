@@ -220,15 +220,29 @@ func _convert_value_by_type(value: String, type: int):
 				return trimmed
 
 ## 内部方法：打开CSV文件（读取模式）
+## 支持跨平台（包括Web导出）
 ## @return: 成功返回FileAccess对象，失败返回null
 func _open_csv_file_read(file_path: String) -> FileAccess:
+	# 首先检查文件是否存在
 	if not FileAccess.file_exists(file_path):
 		push_error("CSV文件不存在: " + file_path)
+		push_error("当前平台: " + OS.get_name())
+		push_error("提示：请确保CSV文件在导出预设的include_filter中")
 		return null
 	
+	# 尝试打开文件
 	var file = FileAccess.open(file_path, FileAccess.READ)
 	if file == null:
 		push_error("无法打开CSV文件: " + file_path)
+		push_error("当前平台: " + OS.get_name())
+		
+		# Web平台特殊提示
+		if OS.get_name() == "Web" or OS.get_name() == "HTML5":
+			push_error("Web平台提示：")
+			push_error("  1. 确保CSV文件在导出预设中被包含")
+			push_error("  2. 检查export_presets.cfg中的include_filter设置")
+			push_error("  3. 如果问题持续，考虑使用Resource类包装CSV数据")
+		
 		return null
 	
 	return file
