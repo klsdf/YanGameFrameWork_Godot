@@ -14,6 +14,16 @@ const MAX_SAVE_FILE_SLOT = 99
 
 var save_file_slot: int = 0
 
+## 缓存字典（key: "slot_key", value: 缓存的值）
+var _cache: Dictionary = {}
+
+## 获取缓存键（槽位 + 键名）
+func _get_cache_key(key: String) -> String:
+	return str(save_file_slot) + "_" + key
+
+## 清除缓存（切换槽位时调用）
+func _clear_cache() -> void:
+	_cache.clear()
 
 func get_save_file_path() -> String:
 	return SAVE_DIR + "/save_data_" + str(save_file_slot) + ".json"
@@ -34,6 +44,11 @@ func change_save_file_slot(slot: int) -> void:
 	if slot < 0:
 		slot = 0
 		print("[YanSaveManager] 存档槽位超出最小值，已重置为0")
+	
+	# 如果切换了槽位，清除缓存（因为不同槽位的数据不同）
+	if save_file_slot != slot:
+		_clear_cache()
+	
 	save_file_slot = slot
 	print("[YanSaveManager] 存档槽位已切换到: %d" % save_file_slot)
 
@@ -245,6 +260,10 @@ func save_game( key, value) -> void:
 	# 更新或添加新的 key-value
 	save_data[key] = serialized_value
 	
+	# 更新缓存（保存时自动更新缓存）
+	var cache_key = _get_cache_key(key)
+	_cache[cache_key] = value
+	
 	# 更新或创建存档元数据
 	var meta_data: SaveMetaData
 	if save_data.has("_meta_data"):
@@ -281,6 +300,12 @@ func load_game(key: String, default_value: Variant = null) -> Variant:
 	@param default_value: 当键不存在时使用的默认值。如果提供了默认值，会自动保存到存档中
 	@return: 加载的值，如果键不存在且未提供默认值则返回 null
 	"""
+	# 先检查缓存
+	var cache_key = _get_cache_key(key)
+	if _cache.has(cache_key):
+		# 缓存命中，直接返回缓存的值
+		return _cache[cache_key]
+	
 	_check_and_create_save_file()
 	
 	var save_file_path = get_save_file_path()
@@ -290,6 +315,8 @@ func load_game(key: String, default_value: Variant = null) -> Variant:
 		# 如果提供了默认值，使用默认值并保存（这是正常的初始化过程）
 		if default_value != null:
 			print("[YanSaveManager] 存档文件不存在，使用默认值并创建存档，键: %s" % key)
+			# 先更新缓存，再保存（save_game 会再次更新缓存，但这样更安全）
+			_cache[cache_key] = default_value
 			save_game(key, default_value)
 			return default_value
 		# 如果没有提供默认值，这才是真正的错误
@@ -305,6 +332,8 @@ func load_game(key: String, default_value: Variant = null) -> Variant:
 		# 如果提供了默认值，使用默认值并保存（尝试修复损坏的存档）
 		if default_value != null:
 			print("[YanSaveManager] JSON 解析失败，使用默认值并修复存档，键: %s" % key)
+			# 先更新缓存，再保存
+			_cache[cache_key] = default_value
 			save_game(key, default_value)
 			return default_value
 		# 如果没有提供默认值，这才是真正的错误
@@ -316,6 +345,8 @@ func load_game(key: String, default_value: Variant = null) -> Variant:
 		# 如果提供了默认值，使用默认值并保存到存档
 		if default_value != null:
 			print("[YanSaveManager] 存档中不存在键: %s，使用默认值并保存" % key)
+			# 先更新缓存，再保存
+			_cache[cache_key] = default_value
 			save_game(key, default_value)
 			return default_value
 		else:
@@ -326,6 +357,9 @@ func load_game(key: String, default_value: Variant = null) -> Variant:
 	
 	# 反序列化值（如果是对象则重建）
 	var value = _deserialize_value(serialized_value)
+	
+	# 更新缓存
+	_cache[cache_key] = value
 	
 	print("[YanSaveManager] 从槽位 %d 加载键 %s 的值" % [save_file_slot, key])
 	return value
