@@ -275,14 +275,24 @@ func save_game( key, value) -> void:
 		push_error("[YanSaveManager] 无法打开文件进行写入: %s" % save_file_path)
 
 
-func load_game(key: String) -> Variant:
-	"""从指定槽位加载游戏数据，返回对应 key 的值，支持对象反序列化"""
+func load_game(key: String, default_value: Variant = null) -> Variant:
+	"""从指定槽位加载游戏数据，返回对应 key 的值，支持对象反序列化
+	@param key: 要加载的键名
+	@param default_value: 当键不存在时使用的默认值。如果提供了默认值，会自动保存到存档中
+	@return: 加载的值，如果键不存在且未提供默认值则返回 null
+	"""
 	_check_and_create_save_file()
 	
 	var save_file_path = get_save_file_path()
 	
 	var file = FileAccess.open(save_file_path, FileAccess.READ)
 	if not file:
+		# 如果提供了默认值，使用默认值并保存（这是正常的初始化过程）
+		if default_value != null:
+			print("[YanSaveManager] 存档文件不存在，使用默认值并创建存档，键: %s" % key)
+			save_game(key, default_value)
+			return default_value
+		# 如果没有提供默认值，这才是真正的错误
 		push_error("[YanSaveManager] 无法打开存档文件: %s" % save_file_path)
 		return null
 	
@@ -292,13 +302,25 @@ func load_game(key: String) -> Variant:
 	var json = JSON.new()
 	var parse_result = json.parse(json_string)
 	if parse_result != OK:
+		# 如果提供了默认值，使用默认值并保存（尝试修复损坏的存档）
+		if default_value != null:
+			print("[YanSaveManager] JSON 解析失败，使用默认值并修复存档，键: %s" % key)
+			save_game(key, default_value)
+			return default_value
+		# 如果没有提供默认值，这才是真正的错误
 		push_error("[YanSaveManager] JSON 解析失败: %s" % save_file_path)
 		return null
 	
 	var save_data = json.data as Dictionary
 	if not save_data.has(key):
-		push_warning("[YanSaveManager] 存档中不存在键: %s" % key)
-		return null
+		# 如果提供了默认值，使用默认值并保存到存档
+		if default_value != null:
+			print("[YanSaveManager] 存档中不存在键: %s，使用默认值并保存" % key)
+			save_game(key, default_value)
+			return default_value
+		else:
+			push_warning("[YanSaveManager] 存档中不存在键: %s" % key)
+			return null
 	
 	var serialized_value = save_data[key]
 	
@@ -319,6 +341,3 @@ func get_save_meta_data() -> SaveMetaData:
 		return null
 	
 	return meta_data_serialized as SaveMetaData
-
-
-

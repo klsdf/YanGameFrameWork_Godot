@@ -14,6 +14,11 @@ var api_key = ""
 
 var key_file_path: String = "res://api_key.txt"
 
+# 全局 system prompt 配置（从文件加载）
+var global_system_prompt: String = ""
+
+# 全局 system prompt 文件路径
+const GLOBAL_SYSTEM_PROMPT_PATH = "res://configs/prompts/global_system_prompt.txt"
 
 # HTTP请求节点
 var http_request: HTTPRequest
@@ -37,7 +42,9 @@ func _init():
 		set_api_key(key)
 	else:
 		push_error("无法读取API key文件: " + key_file_path)
-
+	
+	# 加载全局 system prompt
+	_load_global_system_prompt()
 
 	http_request = HTTPRequest.new()
 	add_child(http_request)
@@ -55,6 +62,22 @@ func load_api_key() -> String:
 		return content
 	return ""
 
+# 加载全局 system prompt
+func _load_global_system_prompt() -> void:
+	"""从文件加载全局 system prompt"""
+	if not FileAccess.file_exists(GLOBAL_SYSTEM_PROMPT_PATH):
+		push_warning("全局 system prompt 文件不存在: " + GLOBAL_SYSTEM_PROMPT_PATH)
+		global_system_prompt = ""
+		return
+	
+	var file = FileAccess.open(GLOBAL_SYSTEM_PROMPT_PATH, FileAccess.READ)
+	if file:
+		global_system_prompt = file.get_as_text().strip_edges()
+		file.close()
+	else:
+		push_error("无法打开全局 system prompt 文件: " + GLOBAL_SYSTEM_PROMPT_PATH)
+		global_system_prompt = ""
+
 
 # 流式传输聊天完成请求
 func chat_completion_stream(messages: Array) -> void:
@@ -64,10 +87,13 @@ func chat_completion_stream(messages: Array) -> void:
 	
 	var url = BASE_URL + "/chat/completions"
 	
+	# 处理消息数组，自动添加全局 system prompt
+	var prepared_messages = _prepare_messages(messages)
+	
 	# 构建请求体，添加 stream: true
 	var body = {
 		"model": DEFAULT_MODEL,
-		"messages": messages,
+		"messages": prepared_messages,
 		"stream": true
 	}
 	
@@ -214,10 +240,13 @@ func _process_buffer_lines() -> void:
 func chat_completion(messages: Array) -> void:
 	var url = BASE_URL + "/chat/completions"
 	
+	# 处理消息数组，自动添加全局 system prompt
+	var prepared_messages = _prepare_messages(messages)
+	
 	# 构建请求体
 	var body = {
 		"model": DEFAULT_MODEL,
-		"messages": messages
+		"messages": prepared_messages
 	}
 	
 	var json_body = JSON.stringify(body)
@@ -275,13 +304,31 @@ func _on_request_completed(result: int, response_code: int, _headers: PackedStri
 func set_api_key(key: String) -> void:
 	api_key = key
 
+
+# 处理消息数组，自动添加全局 system prompt（如果配置了的话）
+func _prepare_messages(messages: Array) -> Array:
+	var prepared_messages = messages.duplicate()
+	
+
+	# 在开头添加 system prompt
+	if global_system_prompt != "":
+		prepared_messages.insert(0, {
+			"role": "system",
+			"content": global_system_prompt
+		})
+	
+	return prepared_messages
+
 # 设置额外的请求头（可选，用于在openrouter.ai上排名）
 func chat_completion_with_headers(messages: Array, site_url: String = "", site_name: String = "") -> void:
 	var url = BASE_URL + "/chat/completions"
 	
+	# 处理消息数组，自动添加全局 system prompt
+	var prepared_messages = _prepare_messages(messages)
+	
 	var body = {
 		"model": DEFAULT_MODEL,
-		"messages": messages
+		"messages": prepared_messages
 	}
 	
 	var json_body = JSON.stringify(body)
