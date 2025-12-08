@@ -37,3 +37,15 @@ static var CSV: YanCSVManager:## CSV管理器
 		if not _csv:
 			_csv = YanCSVManager.new()
 		return _csv
+
+static var _save: YanSaveManager
+static var Save: YanSaveManager:## 存档管理器
+	get:
+		if not _save:
+			_save = YanSaveManager.new()
+			# 将 SaveManager 添加到场景树（如果需要访问场景树）
+			if Engine.get_main_loop():
+				var scene_tree = Engine.get_main_loop() as SceneTree
+				if scene_tree and scene_tree.root:
+					scene_tree.root.add_child(_save)
+		return _save

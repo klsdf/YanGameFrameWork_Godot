@@ -4,7 +4,7 @@ extends CanvasLayer
 ## 类似 Unity 的 OnGUI，可以在代码中快速创建调试界面
 ## 使用方式：
 ##   YanGF.Debug.debug_panel.label("FPS", func(): return str(Engine.get_frames_per_second()))
-##   YanGF.Debug.debug_panel.button("保存游戏", func(): SaveManager.save_game(0, "test", "data"))
+##   YanGF.Debug.debug_panel.button("保存游戏", func(): YanGF.Save.save_game(0, "test", "data"))
 
 class_name YanDebugPanel
 
@@ -14,7 +14,7 @@ var debug_items: Dictionary = {}  # 存储调试项，key 为名称，value 为�
 
 func _ready() -> void:
 	_create_debug_panel()
-	# 默认隐藏，按 F7 切换显示
+	# 默认隐藏，按 ~ 键切换显示
 	set_process_input(true)
 
 
@@ -57,9 +57,9 @@ func _create_debug_panel() -> void:
 
 
 func _input(event: InputEvent) -> void:
-	"""按 F7 切换调试面板显示"""
+	"""按 ~ 键切换调试面板显示"""
 	if event is InputEventKey and event.pressed:
-		if event.keycode == KEY_F7:
+		if event.keycode == KEY_QUOTELEFT:  # ~ 键
 			debug_panel.visible = not debug_panel.visible
 
 
