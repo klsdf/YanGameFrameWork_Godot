@@ -58,7 +58,9 @@ func open_save_directory() -> void:
 	
 	# 确保目录存在
 	if not DirAccess.dir_exists_absolute(save_dir):
-		DirAccess.open(SAVE_DIR).make_dir_recursive(".")
+		var error = DirAccess.make_dir_recursive_absolute(save_dir)
+		if error != OK:
+			push_error("[YanSaveManager] 创建目录失败: %s (错误码: %d)" % [save_dir, error])
 	
 	# 尝试打开目录
 	var error = OS.shell_open(save_dir)
@@ -88,9 +90,14 @@ func _check_and_create_save_file() -> void:
 	var save_file_path = get_save_file_path()
 	
 	# 确保存档目录存在
-	if not DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(SAVE_DIR)):
-		DirAccess.open(SAVE_DIR).make_dir_recursive(".")
-		print("[YanSaveManager] 创建存档目录: %s" % SAVE_DIR)
+	var globalized_path = ProjectSettings.globalize_path(SAVE_DIR)
+	if not DirAccess.dir_exists_absolute(globalized_path):
+		# 使用静态方法创建目录（递归创建所有父目录）
+		var error = DirAccess.make_dir_recursive_absolute(globalized_path)
+		if error == OK:
+			print("[YanSaveManager] 创建存档目录: %s" % SAVE_DIR)
+		else:
+			push_error("[YanSaveManager] 创建存档目录失败: %s (错误码: %d)" % [SAVE_DIR, error])
 	
 	# 如果文件不存在，创建空文件
 	if not FileAccess.file_exists(save_file_path):
